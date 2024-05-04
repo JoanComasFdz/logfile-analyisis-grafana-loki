@@ -1,0 +1,28 @@
+server:
+  http_listen_port: 9080  #Promtail's web interface
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: 'appName-logs'
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: 'appName'
+          host: 'customer-hostname'
+          environment: 'production'
+          __path__: /var/logs/*.log  # Matches log files in the mapped directory
+    # pipeline_stages:
+    #   - regex:
+    #       expression: '^(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}) \[.*\] (?P<level>\w+)\s+(?P<component>[^\s]+) - (?P<message>.*)'
+    #   - timestamp:
+    #       source: timestamp
+    #       format: RFC3339
+    #   - labels:
+    #       level:
+    #       timestamp:

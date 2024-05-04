@@ -1,0 +1,4 @@
+GET http://localhost:3100/loki/api/v1/labels
+
+###
+GET http://localhost:3100/loki/api/v1/query

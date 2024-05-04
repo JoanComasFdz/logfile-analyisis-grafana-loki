@@ -1,0 +1,33 @@
+services:
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./:/mnt/config  # Mount current directory to /mnt/config in the container
+    command: -config.file=/mnt/config/loki-config.yaml
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - "${PATH_TO_LOGS_DIR}:/var/logs"  # Adjust this to your actual log path
+      - ./promtail-config.yaml:/etc/promtail/config.yaml
+    command: -config.file=/etc/promtail/config.yaml
+    ports:
+      - "9080:9080"  # Promtail's web interface
+    depends_on:
+      - loki
+
+  grafana:
+    image: grafana/grafana:10.4.2
+    ports:
+     - '3000:3000'
+    volumes:
+    #  - grafana-storage:/var/lib/grafana
+      - ./loki-datasource.yaml:/etc/grafana/provisioning/datasources/loki-datasource.yaml
+      - ./grafana-dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
+      - ./dashboards:/etc/grafana/provisioning/dashboards
+
+# volumes:
+#   grafana-storage: {}
