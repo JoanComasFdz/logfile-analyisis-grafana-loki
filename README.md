@@ -27,3 +27,11 @@ Use the file [api.http](api.http) to test the Loki API.
 2. Then sends them to Loki.
 3. Loki stores the logs.
 4. Grafana queries them using LogQL.
+
+## Future work
+- Add the file name as a label to the logs.
+- Add more general metrics to the dashboard:
+    - Log Severity Distributio
+    - Top errors
+    - Min date and max date of the logs
+    - Number of lines per file
